@@ -2,3 +2,7 @@ info
 .idea
 bike.iml
 target
+src/main/resources/be/pieterprovoost/bike/engine/knooppunten.xml
+src/main/resources/be/pieterprovoost/bike/engine/trajecten.xml
+src/main/resources/be/pieterprovoost/bike/engine/knooppunten.geojson
+src/main/resources/be/pieterprovoost/bike/engine/trajecten.geojson
