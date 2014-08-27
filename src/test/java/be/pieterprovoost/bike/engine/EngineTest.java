@@ -8,6 +8,7 @@ public class EngineTest {
     public void engineTest() {
 
         Engine engine = new Engine();
+        engine.getPath("111635", "111640");
 
     }
 
