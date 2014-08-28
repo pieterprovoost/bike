@@ -3,11 +3,17 @@ package be.pieterprovoost.bike.engine;
 import be.pieterprovoost.bike.dijkstra.Dijkstra;
 import be.pieterprovoost.bike.dijkstra.Node;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.Point;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.*;
 
 public class Engine {
@@ -87,6 +93,28 @@ public class Engine {
                 cd = d;
                 closest = entry.getKey();
             }
+        }
+        return closest;
+    }
+
+    public String getClosest(String address) {
+        String closest = null;
+        try {
+            URL url = new URL("http://open.mapquestapi.com/nominatim/v1/search.php?format=json&q=" + URLEncoder.encode(address));
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            Double lat = Double.parseDouble((String) JsonPath.read(response.toString(), "$[0].lat"));
+            Double lon = Double.parseDouble((String) JsonPath.read(response.toString(), "$[0].lon"));
+            closest = getClosest(lat, lon);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return closest;
     }
