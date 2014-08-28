@@ -13,7 +13,7 @@ import java.util.*;
 public class Engine {
 
     private Dijkstra dijkstra = new Dijkstra();
-    Map<String, KPoint> nodes = new HashMap<String, KPoint>();
+    Map<String, BikePoint> bikePoints = new HashMap<String, BikePoint>();
 
     public Engine() {
 
@@ -31,7 +31,6 @@ public class Engine {
                 String end = feature.getProperties().get("end_geoid").toString();
                 String length = feature.getProperties().get("Shape_Length").toString();
                 dijkstra.add(begin, end, Double.parseDouble(length));
-                System.out.println("Path: " + begin + " " + end + " " + length);
             }
 
             // read nodes
@@ -47,12 +46,11 @@ public class Engine {
                 Point point = (Point) feature.getGeometry();
                 Double latitude = point.getCoordinates().getLatitude();
                 Double longitude = point.getCoordinates().getLongitude();
-                KPoint node = new KPoint();
-                node.setNumber(number);
-                node.setLatitude(latitude);
-                node.setLongitude(longitude);
-                nodes.put(geoid, node);
-                System.out.println("Node: " + geoid + " " + number + " " + latitude + " " + longitude);
+                BikePoint bikePoint = new BikePoint();
+                bikePoint.setNumber(number);
+                bikePoint.setLatitude(latitude);
+                bikePoint.setLongitude(longitude);
+                bikePoints.put(geoid, bikePoint);
             }
 
         } catch (Exception e) {
@@ -61,13 +59,15 @@ public class Engine {
 
     }
 
-    public void getPath(String begin, String end) {
+    public List<BikePoint> getPath(String begin, String end) {
         List<Node> list = dijkstra.calculate(begin, end);
+        List<BikePoint> pathPoints = new ArrayList<BikePoint>();
         for (Node node : list) {
             String id = node.getId();
-            KPoint point = nodes.get(id);
-            System.out.println(point.getNumber());
+            BikePoint point = bikePoints.get(id);
+            pathPoints.add(point);
         }
+        return pathPoints;
     }
 
 }

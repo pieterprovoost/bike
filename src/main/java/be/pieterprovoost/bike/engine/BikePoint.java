@@ -1,6 +1,6 @@
 package be.pieterprovoost.bike.engine;
 
-public class KPoint {
+public class BikePoint {
 
     private String number;
     private Double latitude;
