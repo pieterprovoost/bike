@@ -59,12 +59,45 @@ public class Engine {
 
     }
 
+    private Double rad(Double degrees) {
+        return degrees * (Math.PI / 180.0);
+    }
+
+    private Double distance(Double lat1, Double lon1, Double lat2, Double lon2) {
+        Double r = 6371000.0;
+        Double dlat = rad(lat2 - lat1);
+        Double dlon = rad(lon2 - lon1);
+        Double a =
+            Math.sin(dlat / 2) * Math.sin(dlat / 2) +
+            Math.cos(rad(lat1)) * Math.cos(rad(lat2)) *
+            Math.sin(dlon / 2) * Math.sin(dlon / 2);
+        Double c = 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        Double d = r * c;
+        return d;
+    }
+
+    public String getClosest(Double latitude, Double longitude) {
+        String closest = null;
+        Double cd = Double.MAX_VALUE;
+        Iterator<Map.Entry<String, BikePoint>> it = bikePoints.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, BikePoint> entry = it.next();
+            Double d = distance(entry.getValue().getLatitude(), entry.getValue().getLongitude(), latitude, longitude);
+            if (d < cd) {
+                cd = d;
+                closest = entry.getKey();
+            }
+        }
+        return closest;
+    }
+
     public List<BikePoint> getPath(String begin, String end) {
         List<Node> list = dijkstra.calculate(begin, end);
         List<BikePoint> pathPoints = new ArrayList<BikePoint>();
         for (Node node : list) {
             String id = node.getId();
             BikePoint point = bikePoints.get(id);
+            point.setDistance(node.getDistance());
             pathPoints.add(point);
         }
         return pathPoints;

@@ -5,6 +5,7 @@ public class BikePoint {
     private String number;
     private Double latitude;
     private Double longitude;
+    private Double distance;
 
     public String getNumber() {
         return number;
@@ -28,6 +29,14 @@ public class BikePoint {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
 
 }
