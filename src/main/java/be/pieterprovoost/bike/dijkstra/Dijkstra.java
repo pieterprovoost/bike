@@ -9,11 +9,6 @@ public class Dijkstra {
     private List<Node> settled = new ArrayList<Node>();
     private List<Node> unsettled = new ArrayList<Node>();
 
-    public void clear() {
-        reset();
-        graph.clear();
-    }
-
     public void reset() {
         settled.clear();
         unsettled.clear();

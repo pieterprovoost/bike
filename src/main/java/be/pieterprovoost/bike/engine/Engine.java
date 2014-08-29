@@ -119,7 +119,7 @@ public class Engine {
         return closest;
     }
 
-    public List<BikePoint> getPath(String begin, String end) {
+    public synchronized List<BikePoint> getPath(String begin, String end) {
         List<Node> list = dijkstra.calculate(begin, end);
         List<BikePoint> pathPoints = new ArrayList<BikePoint>();
         for (Node node : list) {
