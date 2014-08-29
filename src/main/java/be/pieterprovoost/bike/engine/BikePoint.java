@@ -1,11 +1,29 @@
 package be.pieterprovoost.bike.engine;
 
-public class BikePoint {
+import java.io.*;
+
+public class BikePoint implements Serializable {
 
     private String number;
     private Double latitude;
     private Double longitude;
     private Double distance;
+
+    public BikePoint clone() {
+        BikePoint copy = null;
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+            out.writeObject(this);
+            ByteArrayInputStream bis = new   ByteArrayInputStream(bos.toByteArray());
+            ObjectInputStream in = new ObjectInputStream(bis);
+            copy = (BikePoint) in.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return copy;
+        }
+    }
 
     public String getNumber() {
         return number;

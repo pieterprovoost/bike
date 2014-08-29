@@ -124,7 +124,7 @@ public class Engine {
         List<BikePoint> pathPoints = new ArrayList<BikePoint>();
         for (Node node : list) {
             String id = node.getId();
-            BikePoint point = bikePoints.get(id);
+            BikePoint point = bikePoints.get(id).clone();
             point.setDistance(node.getDistance());
             pathPoints.add(point);
         }
