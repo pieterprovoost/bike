@@ -10,6 +10,7 @@ import org.geojson.FeatureCollection;
 import org.geojson.Point;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -114,8 +115,10 @@ public class Engine {
             Double lon = Double.parseDouble((String) JsonPath.read(response.toString(), "$[0].lon"));
             String closest = getClosest(lat, lon);
             return closest;
+        } catch (IOException e) {
+            throw new GeocodingException("Error: cannot connect to geocoding service");
         } catch (Exception e) {
-            throw new GeocodingException(e.getMessage());
+            throw new GeocodingException("Error: input cannot be geocoded");
         }
     }
 

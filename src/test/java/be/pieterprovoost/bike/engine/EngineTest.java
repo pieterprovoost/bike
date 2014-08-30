@@ -12,7 +12,7 @@ public class EngineTest {
         try {
             Engine engine = new Engine();
             long startTime = System.nanoTime();
-            String begin = engine.getClosest("Weeldestuk Brugge");
+            String begin = engine.getClosest("aaWeeldestuk aaBrugge");
             String end = engine.getClosest("Stroelputstraat Veldegem");
             long midTime = System.nanoTime();
             List<BikePoint> path = engine.getPath(begin, end);
