@@ -2,6 +2,7 @@ package be.pieterprovoost.bike.engine;
 
 import be.pieterprovoost.bike.dijkstra.Dijkstra;
 import be.pieterprovoost.bike.dijkstra.Node;
+import be.pieterprovoost.bike.exceptions.GeocodingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.geojson.Feature;
@@ -97,8 +98,7 @@ public class Engine {
         return closest;
     }
 
-    public String getClosest(String address) {
-        String closest = null;
+    public String getClosest(String address) throws GeocodingException {
         try {
             URL url = new URL("http://open.mapquestapi.com/nominatim/v1/search.php?format=json&q=" + URLEncoder.encode(address));
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -112,11 +112,11 @@ public class Engine {
             in.close();
             Double lat = Double.parseDouble((String) JsonPath.read(response.toString(), "$[0].lat"));
             Double lon = Double.parseDouble((String) JsonPath.read(response.toString(), "$[0].lon"));
-            closest = getClosest(lat, lon);
+            String closest = getClosest(lat, lon);
+            return closest;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new GeocodingException(e.getMessage());
         }
-        return closest;
     }
 
     public synchronized List<BikePoint> getPath(String begin, String end) {
